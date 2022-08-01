@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from productapi.models import Product
 class ProductSerializers(serializers.Serializer):
     id=serializers.CharField(read_only=True)
     name=serializers.CharField()
@@ -13,3 +13,9 @@ class ProductSerializers(serializers.Serializer):
             raise serializers.ValidationError("invalid price")
         else:
             return data
+
+
+class ProductModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Product
+        fields="__all__"
