@@ -16,12 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ecomstore import views
-from productapi.views import ProductsView,ProductDetailView
+from productapi.views import ProductsView,ProductDetailView,ProductModelView,ProductDetailModelView
 urlpatterns = [
 path('admin/', admin.site.urls),
 path('ecomstore/products/',views.ProductView.as_view()),
 path('myg/products',ProductsView.as_view()),
-path('myg/products/<int:id>',ProductDetailView.as_view())
+path('myg/products/<int:id>',ProductDetailView.as_view()),
+path('api/v2/myg/products',ProductModelView.as_view()),
+path('api/v2/myg/products/<int:id>',ProductDetailModelView.as_view())
 ]
 
 
