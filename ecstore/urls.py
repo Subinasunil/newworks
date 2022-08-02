@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ecomstore import views
-from productapi.views import ProductsView,ProductDetailView,ProductModelView,ProductDetailModelView
+from productapi.views import ProductsView,ProductDetailView,ProductModelView,ProductDetailModelView,ProductViewSetView
+from rest_framework.routers import DefaultRouter
+router=DefaultRouter()
+router.register("api/v3/products",ProductViewSetView,basename="products")
 urlpatterns = [
 path('admin/', admin.site.urls),
 path('ecomstore/products/',views.ProductView.as_view()),
@@ -24,6 +27,6 @@ path('myg/products',ProductsView.as_view()),
 path('myg/products/<int:id>',ProductDetailView.as_view()),
 path('api/v2/myg/products',ProductModelView.as_view()),
 path('api/v2/myg/products/<int:id>',ProductDetailModelView.as_view())
-]
+]+router.urls
 
 
