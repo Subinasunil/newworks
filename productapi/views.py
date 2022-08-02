@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from productapi.models import Product
 from serializers import ProductSerializers,ProductModelSerializer
 from rest_framework import status
+from rest_framework.viewsets import ViewSet
 
 class ProductsView(APIView):
     def get(self,request,*args,**kwargs):
@@ -85,6 +86,44 @@ class ProductDetailModelView(APIView):
 
     def delete(self,request,*args,**kwargs):
         id=kwargs.get("id")
+        instance=Product.objects.get(id=id)
+        instance.delete()
+        return Response({"msg":"deleted"},status=status.HTTP_204_NO_CONTENT)
+
+
+
+class ProductViewSetView(ViewSet):
+    def list(self,request,*args,**kwargs):
+        qs=Product.objects.all()
+        serializer=ProductModelSerializer(qs,many=True)
+        return Response(data=serializer.data)
+
+    def create(self,request,*args,**kwargs):
+        serializer=ProductModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data)
+        else:
+            return Response(data=serializer.errors)
+
+    def retrieve(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        qs=Product.objects.get(id=id)
+        serializer=ProductModelSerializer(qs)
+        return Response(data=serializer.data)
+
+    def update(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        object=Product.objects.get(id=id)
+        serializer=ProductModelSerializer(instance=object,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data)
+        else:
+            return Response(data=serializer.errors)
+
+    def destroy(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
         instance=Product.objects.get(id=id)
         instance.delete()
         return Response({"msg":"deleted"},status=status.HTTP_204_NO_CONTENT)
