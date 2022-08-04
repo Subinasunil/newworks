@@ -4,9 +4,10 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from productapi.models import Product
-from serializers import ProductSerializers,ProductModelSerializer
+from serializers import ProductSerializers,ProductModelSerializer,Userserializer
 from rest_framework import status
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ViewSet,ModelViewSet
+from rest_framework import authentication,permissions
 
 class ProductsView(APIView):
     def get(self,request,*args,**kwargs):
@@ -129,5 +130,16 @@ class ProductViewSetView(ViewSet):
         return Response({"msg":"deleted"},status=status.HTTP_204_NO_CONTENT)
 
 
+class ProductModelviewsetView(ModelViewSet):
 
+    serializer_class=ProductModelSerializer
+    queryset=Product.objects.all()
+    authentication_classes = [authentication.BasicAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+from django.contrib.auth.models import User
+
+class UserMOdelViewsetview(ModelViewSet):
+    serializer_class = Userserializer
+    queryset = User.objects.all()
 
